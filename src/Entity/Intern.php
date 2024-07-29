@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\InternRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -37,6 +39,17 @@ class Intern
 
     #[ORM\Column(length: 20)]
     private ?string $zipCode = null;
+
+    /**
+     * @var Collection<int, Session>
+     */
+    #[ORM\ManyToMany(targetEntity: Session::class, inversedBy: 'interns')]
+    private Collection $Sessions;
+
+    public function __construct()
+    {
+        $this->Sessions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -135,6 +148,30 @@ class Intern
     public function setZipCode(string $zipCode): static
     {
         $this->zipCode = $zipCode;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Session>
+     */
+    public function getSessions(): Collection
+    {
+        return $this->Sessions;
+    }
+
+    public function addSession(Session $session): static
+    {
+        if (!$this->Sessions->contains($session)) {
+            $this->Sessions->add($session);
+        }
+
+        return $this;
+    }
+
+    public function removeSession(Session $session): static
+    {
+        $this->Sessions->removeElement($session);
 
         return $this;
     }

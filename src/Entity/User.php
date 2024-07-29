@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -27,6 +29,24 @@ class User
 
     #[ORM\Column]
     private array $role = [];
+
+    /**
+     * @var Collection<int, session>
+     */
+    #[ORM\OneToMany(targetEntity: session::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $sessions;
+
+    /**
+     * @var Collection<int, ModuleProgram>
+     */
+    #[ORM\ManyToMany(targetEntity: ModuleProgram::class, inversedBy: 'users')]
+    private Collection $ModulePrograms;
+
+    public function __construct()
+    {
+        $this->sessions = new ArrayCollection();
+        $this->ModulePrograms = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -89,6 +109,60 @@ class User
     public function setRole(array $role): static
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, session>
+     */
+    public function getSessions(): Collection
+    {
+        return $this->sessions;
+    }
+
+    public function addSession(session $session): static
+    {
+        if (!$this->sessions->contains($session)) {
+            $this->sessions->add($session);
+            $session->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSession(session $session): static
+    {
+        if ($this->sessions->removeElement($session)) {
+            // set the owning side to null (unless already changed)
+            if ($session->getUser() === $this) {
+                $session->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ModuleProgram>
+     */
+    public function getModulePrograms(): Collection
+    {
+        return $this->ModulePrograms;
+    }
+
+    public function addModuleProgram(ModuleProgram $moduleProgram): static
+    {
+        if (!$this->ModulePrograms->contains($moduleProgram)) {
+            $this->ModulePrograms->add($moduleProgram);
+        }
+
+        return $this;
+    }
+
+    public function removeModuleProgram(ModuleProgram $moduleProgram): static
+    {
+        $this->ModulePrograms->removeElement($moduleProgram);
 
         return $this;
     }
