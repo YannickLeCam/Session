@@ -28,9 +28,16 @@ class ModuleProgram
     #[ORM\OneToMany(targetEntity: Program::class, mappedBy: 'module')]
     private Collection $programs;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'modulePrograms')]
+    private Collection $users;
+
     public function __construct()
     {
         $this->programs = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -87,6 +94,33 @@ class ModuleProgram
             if ($program->getModule() === $this) {
                 $program->setModule(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->addModuleProgram($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeModuleProgram($this);
         }
 
         return $this;

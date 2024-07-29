@@ -20,7 +20,7 @@ class Intern
     private ?string $name = null;
 
     #[ORM\Column(length: 100)]
-    private ?string $fistName = null;
+    private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
@@ -68,14 +68,14 @@ class Intern
         return $this;
     }
 
-    public function getFistName(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->fistName;
+        return $this->firstName;
     }
 
-    public function setFistName(string $fistName): static
+    public function setFirstName(string $firstName): static
     {
-        $this->fistName = $fistName;
+        $this->firstName = $firstName;
 
         return $this;
     }
