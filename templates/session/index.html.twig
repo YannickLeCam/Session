@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des sessions{% endblock %}
+
+{% block body %}
+
+    <h1>Liste des sessions</h1>
+
+    {% if sessions | length > 0 %}
+        <table>
+            <thead>
+                <td>Nom de la session</td>
+                <td>Description</td>
+                <td>Date de commencement</td>
+                <td>Date de fin</td>
+            </thead>
+            <tbody>
+            {% for session in sessions %}
+            <tr>
+                <td>{{session}}</td>
+                <td>{{session.description}}</td>
+                <td>{{session.dateStart | date('d-m-Y')}}</td>
+                <td>{{session.dateEnd | date('d-m-Y')}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        Il n'y a pas de Session . . .
+    {% endif %}
+
+
+{% endblock %}
