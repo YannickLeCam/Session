@@ -23,16 +23,15 @@ class ModuleProgram
     private ?Category $category = null;
 
     /**
-     * @var Collection<int, User>
+     * @var Collection<int, Program>
      */
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'ModulePrograms')]
-    private Collection $users;
+    #[ORM\OneToMany(targetEntity: Program::class, mappedBy: 'module')]
+    private Collection $programs;
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
+        $this->programs = new ArrayCollection();
     }
-
 
     public function getId(): ?int
     {
@@ -64,27 +63,30 @@ class ModuleProgram
     }
 
     /**
-     * @return Collection<int, User>
+     * @return Collection<int, Program>
      */
-    public function getUsers(): Collection
+    public function getPrograms(): Collection
     {
-        return $this->users;
+        return $this->programs;
     }
 
-    public function addUser(User $user): static
+    public function addProgram(Program $program): static
     {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->addModuleProgram($this);
+        if (!$this->programs->contains($program)) {
+            $this->programs->add($program);
+            $program->setModule($this);
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): static
+    public function removeProgram(Program $program): static
     {
-        if ($this->users->removeElement($user)) {
-            $user->removeModuleProgram($this);
+        if ($this->programs->removeElement($program)) {
+            // set the owning side to null (unless already changed)
+            if ($program->getModule() === $this) {
+                $program->setModule(null);
+            }
         }
 
         return $this;

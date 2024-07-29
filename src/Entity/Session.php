@@ -37,13 +37,16 @@ class Session
     #[ORM\ManyToMany(targetEntity: Intern::class, mappedBy: 'Sessions')]
     private Collection $interns;
 
-    #[ORM\ManyToOne(inversedBy: 'sessions')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    /**
+     * @var Collection<int, Program>
+     */
+    #[ORM\OneToMany(targetEntity: Program::class, mappedBy: 'session')]
+    private Collection $programs;
 
     public function __construct()
     {
         $this->interns = new ArrayCollection();
+        $this->programs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -138,14 +141,32 @@ class Session
         return $this;
     }
 
-    public function getUser(): ?User
+    /**
+     * @return Collection<int, Program>
+     */
+    public function getPrograms(): Collection
     {
-        return $this->user;
+        return $this->programs;
     }
 
-    public function setUser(?User $user): static
+    public function addProgram(Program $program): static
     {
-        $this->user = $user;
+        if (!$this->programs->contains($program)) {
+            $this->programs->add($program);
+            $program->setSession($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProgram(Program $program): static
+    {
+        if ($this->programs->removeElement($program)) {
+            // set the owning side to null (unless already changed)
+            if ($program->getSession() === $this) {
+                $program->setSession(null);
+            }
+        }
 
         return $this;
     }
