@@ -2,10 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
+use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CategoryController extends AbstractController
 {
@@ -16,6 +20,30 @@ class CategoryController extends AbstractController
         return $this->render('category/index.html.twig', [
             'controller_name' => 'CategoryController',
             'categories'=>$categories,
+        ]);
+    }
+
+    #[Route('/category/new', name: 'category.new')]
+    #[Route('/category/edit-{id}', name: 'category.edit',requirements : ['id'=>'\d+'])]
+    public function new(Category $category = null,Request $request,EntityManagerInterface $em): Response
+    {
+        if (!$category) {
+            $category = new Category();
+        }
+
+        $form = $this->createForm(CategoryType::class , $category);
+        
+        if ($form->isSubmitted() && $form->isValid() ) {
+            $newCategory= $form->getData();
+            $em->persist($newCategory);
+            $em->flush();
+            $this->addFlash('success','Vous avez bien ajouté une nouvelle catégorie !');
+            return $this->redirectToRoute('app_category');
+        }
+
+        return $this->render('category/new.html.twig', [
+            'controller_name' => 'CategoryController',
+            'form'=>$form,
         ]);
     }
 }
