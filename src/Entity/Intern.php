@@ -41,7 +41,7 @@ class Intern
     private ?string $zipCode = null;
 
     /**
-     * @var Collection<int, session>
+     * @var Collection<int, Session>
      */
     #[ORM\ManyToMany(targetEntity: Session::class, inversedBy: 'interns')]
     private Collection $sessions;
@@ -174,6 +174,26 @@ class Intern
         $this->sessions->removeElement($session);
 
         return $this;
+    }
+
+    public function getAge(): ?int
+    {
+        if ($this->birthday === null) {
+            return null;
+        }
+
+        $now = new \DateTime();
+        $age = $now->diff($this->birthday)->y;
+        return $age;
+    }
+
+    public function getFormattedBirthday(): ?string
+    {
+        if ($this->birthday === null) {
+            return null;
+        }
+
+        return $this->birthday->format('d/m/Y');
     }
     
     public function __toString()

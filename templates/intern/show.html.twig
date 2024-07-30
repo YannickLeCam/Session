@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ intern }}{% endblock %}
+
+{% block body %}
+
+<h1>{{ intern }}</h1>
+
+<h2>Informations globales</h2>
+
+<table>
+    <tr>
+        <td>Email</td>
+        <td>{{ intern.email }}</td>
+    </tr>
+    <tr>
+        <td>Date d'anniversaire (âge)</td>
+        <td>{{ intern.formattedBirthday }} ({{ intern.age }} ans)</td>
+    </tr>
+    <tr>
+        <td>Adresse</td>
+        <td>{{ intern.city }} {{ intern.adress }} {{ intern.zipCode }}</td>
+    </tr>
+</table>
+
+<h2>Les sessions</h2>
+
+{% if intern.sessions | length > 0 %}
+    <table>
+        <thead>
+            <tr>
+                <th>Titre de la session</th>
+                <th>Description de la session</th>
+                <th>Date de commencement</th>
+                <th>Date de fin</th>
+                <th>Places</th>
+                <th>Places restantes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for session in intern.sessions %}
+                <tr>
+                    <td>{{ session.name }}</td>
+                    <td>{{ session.description }}</td>
+                    <td>{{ session.formattedDateStart }}</td>
+                    <td>{{ session.formattedDateEnd }}</td>
+                    <td>{{ session.places }}</td>
+                    <td>{{ session.placesRestantes }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Pas encore inscrit à une session</p>
+{% endif %}
+
+{% endblock %}

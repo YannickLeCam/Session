@@ -30,11 +30,11 @@ class Session
 
     #[ORM\Column]
     private ?int $places = null;
-
+    
     /**
      * @var Collection<int, Intern>
      */
-    #[ORM\ManyToMany(targetEntity: Intern::class, mappedBy: 'Sessions')]
+    #[ORM\ManyToMany(targetEntity: Intern::class, mappedBy: 'sessions')]
     private Collection $interns;
 
     /**
@@ -186,6 +186,27 @@ class Session
         return $this;
     }
 
+    public function getPlacesRestantes(){
+        return ($this->places - count($this->interns));
+    }
+
+
+    public function getFormattedDateEnd(): ?string
+    {
+        if ($this->dateEnd === null) {
+            return null;
+        }
+
+        return $this->dateEnd->format('d/m/Y');
+    }
+    public function getFormattedDateStart(): ?string
+    {
+        if ($this->dateStart === null) {
+            return null;
+        }
+
+        return $this->dateStart->format('d/m/Y');
+    }
     public function __toString()
     {
         return $this->name;
