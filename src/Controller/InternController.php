@@ -57,4 +57,14 @@ class InternController extends AbstractController
             'intern'=>$intern,
         ]);
     }
+
+    #[Route('/intern/delete-{id}', name: 'intern.delete',requirements : ['id'=>'\d+'])]
+    public function delete(Intern $intern,EntityManagerInterface $em): Response
+    {
+        $internMessage =(string) $intern;
+        $em->remove($intern);
+        $em->flush();
+        $this->addFlash('success',"Vous avez bien supprimer $internMessage !");
+        return $this->redirectToRoute('app_intern');
+    }
 }

@@ -6,8 +6,9 @@
 
     <h1>Liste des stagiaires</h1>
 
+    <a href="{{path('intern.new')}}">Ajouter un stagiaire</a>
     {% for intern in interns %}
-        <li>{{intern}}</li>
+        <li><a href="{{path('intern.show',{id:intern.id})}}">{{intern}}</a>  <a href="{{path('intern.delete',{id:intern.id})}}">Supprimer</a> <a href="{{path('intern.edit',{id:intern.id})}}">Editer</a></li>
 
 
     {% endfor %}

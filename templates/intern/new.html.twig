@@ -1,9 +1,11 @@
 {% extends 'base.html.twig' %}
 
+
+
 {% block title %}Ajouter un nouveau Stagiaire{% endblock %}
 
 {% block body %}
-
+    <a href="{{path('app_intern')}}">Retour</a>
     <h1> Ajouter un nouveau Stagiaire</h1>
 
     {{form(form)}}
