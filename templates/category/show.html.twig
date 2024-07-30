@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{category}}{% endblock %}
+
+{% block body %}
+
+    <a href="{{path('app_category')}}">Retour</a>
+
+    <h1>{{category}}</h1>
+
+    <table>
+        <thead>
+            <td>Nom du Module</td>
+            <td>Le(s) intervenant(s)</td>
+            <td>Nom de la/des session(s) / durée</td>
+        </thead>
+        <tbody>
+            {% for module in category.modulePrograms %}
+                <tr>
+                    <td>{{module.name}}</td>
+                    <td>
+                    {% for user in module.users %}
+                        <li>{{user}}</li>
+                    {% endfor %}
+                    </td>
+                    <td>
+                        <table>
+                        {% for program in module.programs %}
+                            <tr>
+                                <td>{{program.session}} </td>
+                                <td>{{program.duration}} jours</td>
+                            </tr>
+                        {% endfor %}
+                        </table>
+
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}
