@@ -8,8 +8,9 @@ use App\Entity\ModuleProgram;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class ProgramType extends AbstractType
@@ -24,6 +25,11 @@ class ProgramType extends AbstractType
                 'attr' => [
                     'class' => 'form-control'
                 ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Votre session ne peut pas etre vide',
+                    ]),
+                ],
             ])
             ->add('module', EntityType::class, [
                 'class' => ModuleProgram::class,
@@ -31,11 +37,21 @@ class ProgramType extends AbstractType
                 'attr' => [
                     'class' => 'form-control'
                 ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Votre module ne peut pas etre vide',
+                    ]),
+                ],
             ])
             ->add('duration',NumberType::class,[
                 'attr'=> [
                     'class' => 'form-control'
-                ]
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Votre durée ne peut pas etre vide',
+                    ]),
+                ],
             ])
             ->add('Valider',SubmitType::class,[
                 'attr' => [

@@ -2,10 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\ModuleProgram;
+use App\Form\ModuleProgramType;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ModuleProgramRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ModuleProgramController extends AbstractController
 {
@@ -17,6 +21,34 @@ class ModuleProgramController extends AbstractController
         return $this->render('module_program/index.html.twig', [
             'controller_name' => 'ModuleProgramController',
             'modules'=>$modules,
+        ]);
+
+
+    }
+
+    #[Route('/module/new', name: 'module_program.new')]
+    #[Route('/module/edit-{id}', name: 'module_program.edit',requirements : ['id'=>'\d+'])]
+    public function new(ModuleProgram $moduleProgram = null,Request $request,EntityManagerInterface $em): Response
+    {
+        if (!$moduleProgram) {
+            $moduleProgram = new ModuleProgram();
+        }
+
+        $form = $this->createForm(ModuleProgramType::class , $moduleProgram);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid() ) {
+
+            $newModuleProgram= $form->getData();
+            dump($newModuleProgram);
+            $em->persist($newModuleProgram);
+            $em->flush();
+            $this->addFlash('success','Vous avez bien ajouté un nouveau module !');
+            return $this->redirectToRoute('app_module_program');
+        }
+
+        return $this->render('module_program/new.html.twig', [
+            'controller_name' => 'CategoryController',
+            'form'=>$form,
         ]);
     }
 }
