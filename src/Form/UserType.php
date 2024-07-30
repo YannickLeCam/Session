@@ -7,6 +7,8 @@ use App\Entity\ModuleProgram;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -33,7 +35,7 @@ class UserType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('email',TextType::class,[
+            ->add('email',EmailType::class,[
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Le mail ne peut pas être vide.',
@@ -43,7 +45,7 @@ class UserType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('password',TextType::class, [
+            ->add('password',PasswordType::class, [
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Le mot de passe ne peut pas être vide.',
