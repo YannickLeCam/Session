@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{user}}{% endblock %}
+
+{% block body %}
+
+    <a href="{{path('app_user')}}">Retour</a>
+    <h1>{{user}}</h1>
+
+    <h2>Informations globales</h2>
+
+    <p>Email : {{user.email}}</p>
+
+    
+    {% if user.sessions|length > 0 %}
+        <h2>Responsable de sessions</h2>
+        <table>
+            <thead>
+                <td>Nom de la session</td>
+                <td>Description de la session</td>
+                <td>Date de départ</td>
+                <td>Date de fin</td>
+                <td>Nombre de places</td>
+                <td>Places Restantes</td>
+            </thead>
+            <tbody>
+                {% for session in user.sessions %}
+                    <tr>
+                        <td>{{session}}</td>
+                        <td>{{session.description}}</td>
+                        <td>{{session.formattedDateStart}}</td>
+                        <td>{{session.formattedDateEnd}}</td>
+                        <td>{{session.places}}</td>
+                        <td>{{session.placesRestantes}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    {% if user.modulePrograms|length > 0 %}
+        <h2>Intervenant pour les modules</h2>
+        <table>
+            <thead>
+
+            </thead>
+            <tbody>
+                {% for module in user.modulePrograms %}
+                    <tr>
+                        <td><a href="{{path('module_program.show',{id:module.id})}}">{{module}}</a></td>
+                        <td><a href="{{path('category.show',{id:module.category.id})}}">{{module.category}}</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+
+{% endblock %}

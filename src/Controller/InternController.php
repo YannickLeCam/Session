@@ -43,7 +43,7 @@ class InternController extends AbstractController
         }
 
         return $this->render('intern/new.html.twig', [
-            'controller_name' => 'CategoryController',
+            'controller_name' => 'InternController',
             'form'=>$form,
         ]);
     }
@@ -53,7 +53,7 @@ class InternController extends AbstractController
     {
 
         return $this->render('intern/show.html.twig', [
-            'controller_name' => 'CategoryController',
+            'controller_name' => 'InternController',
             'intern'=>$intern,
         ]);
     }

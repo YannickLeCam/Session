@@ -42,10 +42,27 @@ class ProgramController extends AbstractController
         }
 
         return $this->render('program/new.html.twig', [
-            'controller_name' => 'CategoryController',
+            'controller_name' => 'ProgramController',
             'form'=>$form,
         ]);
     }
 
-    
+    #[Route('program/show-{id}', name: 'program.show',requirements : ['id'=>'\d+'])]
+    public function show(Program $program): Response
+    {
+        return $this->render('program/show.html.twig', [
+            'controller_name' => 'ProgramController',
+            'Program'=>$program,
+        ]);
+    }
+
+    #[Route('/program/delete-{id}', name: 'program.delete',requirements : ['id'=>'\d+'])]
+    public function delete(Program $program,EntityManagerInterface $em): Response
+    {
+        $programMessage =(string) $program;
+        $em->remove($program);
+        $em->flush();
+        $this->addFlash('success',"Vous avez bien supprimer $programMessage !");
+        return $this->redirectToRoute('app_program');
+    }
 }

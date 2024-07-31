@@ -5,6 +5,7 @@
 {% block body %}
 
     <h1>Liste des sessions</h1>
+    <a href="{{path('session.new')}}">Ajouter une nouvelle Session</a>
 
     {% if sessions | length > 0 %}
         <table>
@@ -26,7 +27,7 @@
             </tbody>
         </table>
     {% else %}
-        Il n'y a pas de Session . . .
+        <p>Il n'y a pas de Session . . .</p>
     {% endif %}
 
 

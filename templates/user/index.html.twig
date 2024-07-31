@@ -3,9 +3,16 @@
 {% block title %}Listes des utilisateurs{% endblock %}
 
 {% block body %}
-    <h1>Listes des utilisateurs</h1>
 
-    {% for user in users %}
-        <li>{{user}}</li>
-    {% endfor %}
+    <a href="{{path('user.new')}}">Inscription d'un utilisateur</a>
+    <h1>Liste des utilisateurs</h1>
+
+    {% if users|length > 0 %}
+        {% for user in users %}
+            <li><a href="{{path('user.show',{id:user.id})}}">{{user}}</a></li>
+        {% endfor %}
+    {% else %}
+        <p>Il n'y a pas d'utilisateur intégré</p>
+    {% endif %}
+
 {% endblock %}

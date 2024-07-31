@@ -6,6 +6,8 @@
 
     <h1>Liste des programes</h1>
 
+    <a href="{{path('program.new')}}">Ajouter nouveau programe</a>
+
     {% if programs | length > 0 %}
     <table>
         <thead>
@@ -24,7 +26,7 @@
         </tbody>
     </table>
     {% else %}
-        Il n'y a pas de Session . . .
+        <p>Il n'y a pas de Program . . .</p>
     {% endif %}
 
 {% endblock %}

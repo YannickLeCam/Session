@@ -47,7 +47,7 @@ class ModuleProgramController extends AbstractController
         }
 
         return $this->render('module_program/new.html.twig', [
-            'controller_name' => 'CategoryController',
+            'controller_name' => 'ModuleProgramController',
             'form'=>$form,
         ]);
     }

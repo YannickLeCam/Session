@@ -38,12 +38,31 @@ class UserController extends AbstractController
             $newUser->setPassword(password_hash($newUser->getPassword(),PASSWORD_DEFAULT));
             $em->persist($newUser);
             $em->flush();
-            $this->addFlash('success','Vous avez bien ajouté une nouvelle catégorie !');
+            $this->addFlash('success','Vous avez bien ajouté une nouvel utilisateur !');
             return $this->redirectToRoute('app_user');
         }
 
         return $this->render('user/new.html.twig', [
             'form'=>$form,
         ]);
+    }
+
+    #[Route('user/show-{id}', name: 'user.show',requirements : ['id'=>'\d+'])]
+    public function show(User $user): Response
+    {
+        return $this->render('user/show.html.twig', [
+            'controller_name' => 'UserController',
+            'user'=>$user,
+        ]);
+    }
+
+    #[Route('/user/delete-{id}', name: 'user.delete',requirements : ['id'=>'\d+'])]
+    public function delete(User $user,EntityManagerInterface $em): Response
+    {
+        $userMessage =(string) $user;
+        $em->remove($user);
+        $em->flush();
+        $this->addFlash('success',"Vous avez bien supprimer $userMessage !");
+        return $this->redirectToRoute('app_user');
     }
 }

@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{session}}{% endblock %}
+
+
+
+{% block body %}
+
+    <a href="{{path('app_session')}}">Retour</a>
+    <h1> {{session}}</h1>
+
+    <h3>description :</h3>
+    <p>{{session.description}}</p>
+
+    <div id="dateSession">
+        <p class="dateStart">
+            {{session.formattedDateDepart}}
+        </p>
+        <p class="dateEnd">
+            {{session.formattedDateEnd}}
+        </p>
+    </div>
+
+    <div id="placesSession">
+        <table>
+            <thead>
+                <td>Places</td>
+                <td>Places Restantes</td>
+            </thead>
+            <tbody>
+                <td>{{session.places}}</td>
+                <td>{{session.placesRestantes}}</td>
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
