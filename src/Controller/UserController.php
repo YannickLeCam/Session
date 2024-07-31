@@ -19,6 +19,7 @@ class UserController extends AbstractController
 
         $users = $userRepository->findBy([],['name'=>'ASC']);
         return $this->render('user/index.html.twig', [
+            'controller_name' => 'UserController',
             'users' => $users,
         ]);
     }
@@ -43,6 +44,7 @@ class UserController extends AbstractController
         }
 
         return $this->render('user/new.html.twig', [
+            'controller_name' => 'UserController',
             'form'=>$form,
         ]);
     }

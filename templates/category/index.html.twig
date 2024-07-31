@@ -6,7 +6,7 @@
 
     <h1> Liste des Catégories </h1>
 
-    <a href="{{path('category.new')}}">Ajouter une catégorie</a>
+    <a href="{{path('category.new')}}" class="btn btn-success">Ajouter une catégorie</a>
     
     {% if categories | length > 0 %}
         <table>
@@ -16,7 +16,7 @@
             <tbody>
             {% for category in categories %}
             <tr>
-                <td><a href="{{path('category.show',{id:category.id})}}">{{category}}</a></td>
+                <td><a href="{{path('category.show',{id:category.id})}}">{{category}}</a> <a href="{{path('category.edit',{id:category.id})}}" class="btn btn-warning"><i class="fa-regular fa-pen-to-square"></i></a><a href="{{path('category.delete',{id:category.id})}}" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></a></td>
             </tr>
             {% endfor %}
             </tbody>

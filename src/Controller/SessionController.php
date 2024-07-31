@@ -46,4 +46,26 @@ class SessionController extends AbstractController
             'form'=>$form,
         ]);
     }
+
+    #[Route('/session/show-{id}', name: 'session.show',requirements : ['id'=>'\d+'])]
+    public function show(Session $session,SessionRepository $sessionRepository): Response
+    {   
+        $internsNotIn = $sessionRepository->findInternsNotIn($session->getId());
+        return $this->render('session/show.html.twig', [
+            'controller_name' => 'SessionController',
+            'session'=>$session,
+            'internsNotIn' => $internsNotIn
+        ]);
+    }
+
+
+    #[Route('/session/delete-{id}', name: 'session.delete',requirements : ['id'=>'\d+'])]
+    public function delete(Session $session,EntityManagerInterface $em): Response
+    {
+        $sessionMessage =(string) $session;
+        $em->remove($session);
+        $em->flush();
+        $this->addFlash('success',"Vous avez bien supprimer $sessionMessage !");
+        return $this->redirectToRoute('app_session');
+    }
 }

@@ -6,10 +6,10 @@
 
     <h1>Liste des stagiaires</h1>
 
-    <a href="{{path('intern.new')}}">Ajouter un stagiaire</a>
+    <a href="{{path('intern.new')}}" class="btn btn-success">Ajouter un stagiaire</a>
     {% if interns | length > 0 %}
         {% for intern in interns %}
-            <li><a href="{{path('intern.show',{id:intern.id})}}">{{intern}}</a>  <a href="{{path('intern.delete',{id:intern.id})}}">Supprimer</a> <a href="{{path('intern.edit',{id:intern.id})}}">Editer</a></li>
+            <li><a href="{{path('intern.show',{id:intern.id})}}">{{intern}}</a>  <a href="{{path('intern.edit',{id:intern.id})}}" class="btn btn-warning"><i class="fa-regular fa-pen-to-square"></i></a> <a href="{{path('intern.delete',{id:intern.id})}}" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></a></li>
         {% endfor %}
 
     {% else %}

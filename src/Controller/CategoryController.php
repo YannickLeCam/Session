@@ -57,4 +57,14 @@ class CategoryController extends AbstractController
             'category'=>$category,
         ]);
     }
+
+    #[Route('/category/delete-{id}', name: 'category.delete',requirements : ['id'=>'\d+'])]
+    public function delete(Category $category,EntityManagerInterface $em): Response
+    {
+        $categoryMessage =(string) $category;
+        $em->remove($category);
+        $em->flush();
+        $this->addFlash('success',"Vous avez bien supprimer $categoryMessage !");
+        return $this->redirectToRoute('app_intern');
+    }
 }

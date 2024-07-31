@@ -16,6 +16,30 @@ class SessionRepository extends ServiceEntityRepository
         parent::__construct($registry, Session::class);
     }
 
+    public function findInternsNotIn($sessionId){
+        $em = $this->getEntityManager();
+        $sub = $em->createQueryBuilder();
+
+        $queryBuilder = $sub;
+
+        $queryBuilder->select('s')
+            ->from('App\Entity\Intern','s')
+            ->leftJoin('s.sessions','se')
+            ->where('se.id = :id');
+        
+        $sub = $em->createQueryBuilder();
+
+        $sub->select('st')
+            ->from('App\Entity\Intern','st')
+            ->where($sub->expr()->notIn('st.id', $queryBuilder->getDQL()))
+            ->setParameter('id',$sessionId)
+            ->orderBy('st.name')
+        ;
+
+        $query = $sub->getQuery();
+        return $query->getResult();
+    }
+
     //    /**
     //     * @return Session[] Returns an array of Session objects
     //     */

@@ -6,19 +6,22 @@
 
     <h1>Liste des modules</h1>
 
-    <a href="{{path('module_program.new')}}">Ajouter un module</a>
+    <a href="{{path('module_program.new')}}" class="btn btn-success">Ajouter un module</a>
     {% if modules | length > 0 %}
         <table>
             <thead>
                 <td>Nom du module</td>
                 <td>Categorie</td>
+                <td>Editer</td>
+                <td>Supprimer</td>
             </thead>
             <tbody>
             {% for module in modules %}
             <tr>
-                
-                    <td><a href="{{ path('module_program.show',{id:module.id}) }}">{{module}}</a></td>
-                    <td><a href="{{ path('category.show',{id:module.category.id}) }}">{{module.category}}</td>
+                <td><a href="{{ path('module_program.show',{id:module.id}) }}">{{module}}</a></td>
+                <td><a href="{{ path('category.show',{id:module.category.id}) }}">{{module.category}}</td>
+                <td><a href="{{path('module_program.edit',{id:module.id})}}" class="btn btn-warning"><i class="fa-regular fa-pen-to-square"></i></a></td>
+                <td><a href="{{path('module_program.delete',{id:module.id})}}" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></a></td>
                 
             </tr>
             {% endfor %}

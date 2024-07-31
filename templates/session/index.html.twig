@@ -5,7 +5,7 @@
 {% block body %}
 
     <h1>Liste des sessions</h1>
-    <a href="{{path('session.new')}}">Ajouter une nouvelle Session</a>
+    <a href="{{path('session.new')}}" class="btn btn-success">Ajouter une nouvelle Session</a>
 
     {% if sessions | length > 0 %}
         <table>
@@ -14,14 +14,18 @@
                 <td>Description</td>
                 <td>Date de commencement</td>
                 <td>Date de fin</td>
+                <td>Editer</td>
+                <td>Supprimer</td>
             </thead>
             <tbody>
             {% for session in sessions %}
             <tr>
-                <td>{{session}}</td>
+                <td><a href="{{path('session.show',{id:session.id})}}">{{session}}</a></td>
                 <td>{{session.description}}</td>
                 <td>{{session.dateStart | date('d-m-Y')}}</td>
                 <td>{{session.dateEnd | date('d-m-Y')}}</td>
+                <td><a href="{{path('session.edit',{id:session.id})}}" class="btn btn-warning"><i class="fa-regular fa-pen-to-square"></i></a></td>
+                <td><a href="{{path('session.delete',{id:session.id})}}" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></a></td>
             </tr>
             {% endfor %}
             </tbody>

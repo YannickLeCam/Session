@@ -6,7 +6,7 @@
 
     <h1>Liste des programes</h1>
 
-    <a href="{{path('program.new')}}">Ajouter nouveau programe</a>
+    <a href="{{path('program.new')}}" class="btn btn-succes">Ajouter nouveau programe</a>
 
     {% if programs | length > 0 %}
     <table>
@@ -14,6 +14,8 @@
             <td>Session</td>
             <td>Module</td>
             <td>Durée</td>
+            <td>Editer</td>
+            <td>Supprimer</td>
         </thead>
         <tbody>
         {% for program in programs %}
@@ -21,6 +23,8 @@
             <td>{{program.session}}</td>
             <td>{{program.module}}</td>
             <td>{{program.duration}}</td>
+            <td><a href="{{path('program.edit',{id:program.id})}}" class="btn btn-warning"><i class="fa-regular fa-pen-to-square"></i></a></td>
+            <td><a href="{{path('program.delete',{id:program.id})}}" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></a></td>
         </tr>
         {% endfor %}
         </tbody>

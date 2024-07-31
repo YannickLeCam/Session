@@ -14,10 +14,10 @@
 
     <div id="dateSession">
         <p class="dateStart">
-            {{session.formattedDateDepart}}
+            la session commence : {{session.formattedDateStart}}
         </p>
         <p class="dateEnd">
-            {{session.formattedDateEnd}}
+            la session termine : {{session.formattedDateEnd}}
         </p>
     </div>
 
@@ -33,5 +33,42 @@
             </tbody>
         </table>
     </div>
+
+    <h2>Liste des stagiaires participants a la session</h2>
+    {% if session.interns | length > 0 %}
+        {% for intern in session.interns %}
+            <table>
+                <thead>
+                    <td>Nom/Prenom de stagiaires</td>
+                    <td>Supprimer de la session</td>
+                </thead>
+                <tbody>
+                    <td>{{intern}}</td>
+                    <td><i class="fa-solid fa-trash-can"></i></td>
+                </tbody>
+            </table>
+        {% endfor %}
+    {% else %}
+        <p>Il n'y a pas encore de stagiaire inscrit</p>
+    {% endif %}
+
+    {% if session.placesRestantes != 0 %}
+        <h2>Liste des stagiaire pouvant etre Ajouter</h2>
+
+        <table>
+            <thead>
+                <td>Nom / Prénom stagiaires</td>
+                <td> Ajouter stagiaire </td>
+            </thead>
+            <tbody>
+                {% for internNotIn in internsNotIn %}
+                    <tr>
+                        <td>{{internNotIn}}</td>
+                        <td><a href="#"><i class="fa-solid fa-plus"></i></a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 
 {% endblock %}
