@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Intern;
 use App\Entity\Session;
 use App\Form\SessionType;
+use App\Repository\InternRepository;
 use App\Repository\SessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,6 +60,25 @@ class SessionController extends AbstractController
         ]);
     }
 
+    #[Route('/session/addIntern-{id}-{internId}', name: 'session.addIntern',requirements : ['id'=>'\d+','internId'=>'\d+'])]
+    public function addIntern(Session $session,int $internId , InternRepository $internRepository, EntityManagerInterface $em): Response
+    {   
+
+        $intern = $internRepository->findOneBy(['id'=>$internId]);
+        $session->addIntern($intern);
+        $em->flush();
+        return $this->redirectToRoute('session.show',['id'=>$session->getId()]);
+    }
+
+    #[Route('/session/delIntern-{id}-{internId}', name: 'session.delIntern',requirements : ['id'=>'\d+','internId'=>'\d+'])]
+    public function delIntern(Session $session,int $internId , InternRepository $internRepository,EntityManagerInterface $em): Response
+    {   
+
+        $intern = $internRepository->findOneBy(['id'=>$internId]);
+        $session->removeIntern($intern);
+        $em->flush();
+        return $this->redirectToRoute('session.show',['id'=>$session->getId()]);
+    }
 
     #[Route('/session/delete-{id}', name: 'session.delete',requirements : ['id'=>'\d+'])]
     public function delete(Session $session,EntityManagerInterface $em): Response
