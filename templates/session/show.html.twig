@@ -73,4 +73,44 @@
         </table>
     {% endif %}
 
+    <h2>Liste des modules qui compose la session</h2>
+    {% if session.programs | length > 0 %}
+        <table>
+            <thead>
+                <td>Nom du module</td>
+                <td>Durée</td>
+                <td>Supprimer</td>
+            </thead>
+            <tbody>
+        {% for program in session.programs %}
+                <tr>
+                    <td>{{program.module}}</td>
+                    <td><a href="{{path('session.delModule',{id:session.id,programId:program.id})}}"><i class="fa-solid fa-trash-can"></i></a></td>
+                </tr>
+        {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Il n'y a pas encore de module</p>
+    {% endif %}
+
+    {% if session.placesRestantes != 0 %}
+        <h2>Liste des stagiaire pouvant etre Ajouter</h2>
+
+        <table>
+            <thead>
+                <td>Nom du module</td>
+                <td> Ajouter </td>
+            </thead>
+            <tbody>
+                {% for moduleNotIn in modulesNotIn %}
+                    <tr>
+                        <td>{{moduleNotIn}}</td>
+                        <td><a href="{{path('session.addModule',{id:session.id,moduleId:moduleNotIn.id,duration:5})}}"><i class="fa-solid fa-plus"></i></a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
 {% endblock %}

@@ -40,6 +40,29 @@ class SessionRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+    public function findModulesProgramsNotIn($sessionId){
+        $em = $this->getEntityManager();
+        $sub = $em->createQueryBuilder();
+
+        $queryBuilder = $sub;
+
+        $queryBuilder->select('s')
+            ->from('App\Entity\Program','s')
+            ->leftJoin('s.session','se')
+            ->where('se.id = :id');
+        
+        $sub = $em->createQueryBuilder();
+
+        $sub->select('st')
+            ->from('App\Entity\ModuleProgram','st')
+            ->where($sub->expr()->notIn('st.id', $queryBuilder->getDQL()))
+            ->setParameter('id',$sessionId)
+        ;
+
+        $query = $sub->getQuery();
+        return $query->getResult();
+    }
+
     //    /**
     //     * @return Session[] Returns an array of Session objects
     //     */

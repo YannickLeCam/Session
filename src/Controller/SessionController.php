@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Intern;
+use App\Entity\Program;
 use App\Entity\Session;
 use App\Form\SessionType;
 use App\Repository\InternRepository;
+use App\Repository\ModuleProgramRepository;
+use App\Repository\ProgramRepository;
 use App\Repository\SessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,17 +56,18 @@ class SessionController extends AbstractController
     public function show(Session $session,SessionRepository $sessionRepository): Response
     {   
         $internsNotIn = $sessionRepository->findInternsNotIn($session->getId());
+        $modulesNotIn = $sessionRepository->findModulesProgramsNotIn($session->getId());
         return $this->render('session/show.html.twig', [
             'controller_name' => 'SessionController',
             'session'=>$session,
-            'internsNotIn' => $internsNotIn
+            'internsNotIn' => $internsNotIn,
+            'modulesNotIn' => $modulesNotIn,
         ]);
     }
 
     #[Route('/session/addIntern-{id}-{internId}', name: 'session.addIntern',requirements : ['id'=>'\d+','internId'=>'\d+'])]
     public function addIntern(Session $session,int $internId , InternRepository $internRepository, EntityManagerInterface $em): Response
     {   
-
         $intern = $internRepository->findOneBy(['id'=>$internId]);
         $session->addIntern($intern);
         $em->flush();
@@ -71,11 +75,32 @@ class SessionController extends AbstractController
     }
 
     #[Route('/session/delIntern-{id}-{internId}', name: 'session.delIntern',requirements : ['id'=>'\d+','internId'=>'\d+'])]
-    public function delIntern(Session $session,int $internId , InternRepository $internRepository,EntityManagerInterface $em): Response
+    public function delIntern(Session $session,int $internId , int $duration , InternRepository $internRepository,EntityManagerInterface $em): Response
     {   
-
         $intern = $internRepository->findOneBy(['id'=>$internId]);
         $session->removeIntern($intern);
+        $em->flush();
+        return $this->redirectToRoute('session.show',['id'=>$session->getId()]);
+    }
+
+    #[Route('/session/addModule-{id}-{moduleId}-{duration}', name: 'session.addModule',requirements : ['id'=>'\d+','moduleId'=>'\d+','duration'=>'\d+'])]
+    public function addModule(Session $session,int $moduleId , int $duration , ModuleProgramRepository $moduleRepository, EntityManagerInterface $em): Response
+    {   
+        $module = $moduleRepository->findOneBy(['id'=>$moduleId]);
+        $program= new Program();
+        $program->setSession($session);
+        $program->setDuration($duration);
+        $program->setModule($module);
+        $em->persist($program);
+        $em->flush();
+        return $this->redirectToRoute('session.show',['id'=>$session->getId()]);
+    }
+
+    #[Route('/session/delModule-{id}-{programId}', name: 'session.delModule',requirements : ['id'=>'\d+','programId'=>'\d+'])]
+    public function delModule(Session $session,int $programId, ProgramRepository $programRepository , EntityManagerInterface $em): Response
+    {   
+        $program = $programRepository->findOneBy(['id'=>$programId]);
+        $session->removeProgram($program);
         $em->flush();
         return $this->redirectToRoute('session.show',['id'=>$session->getId()]);
     }
