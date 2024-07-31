@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{module}}{% endblock %}
+
+{% block body %}
+    
+    <a href="{{path('app_module_program')}}">Retour</a>
+    
+    <h1> {{module}} </h1>
+
+    <p>Catégorie : <a href="{{path('category.show',{id:module.category.id} ) }}">{{module.category}}</a></p>
+
+    {% if module.users | length > 0 %}
+        {% if module.users | length == 1 %}
+            <h2>L'intervenant :</h2>
+        {% else %}
+            <h2>Les intervenants :</h2>
+        {% endif %}
+
+
+        {% for user in users %}
+            <li>{{user}}</li>
+        {% endfor %}
+    {% else %}
+        <p>Il n'y pas d'intervenant pour ce module encore définit</p>
+    {% endif %}
+
+
+{% endblock %}

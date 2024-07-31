@@ -6,6 +6,7 @@
 
     <h1>Liste des modules</h1>
 
+    <a href="{{path('module_program.new')}}">Ajouter un module</a>
     {% if modules | length > 0 %}
         <table>
             <thead>
@@ -15,14 +16,16 @@
             <tbody>
             {% for module in modules %}
             <tr>
-                <td>{{module}}</td>
-                <td>{{module.category}}</td>
+                
+                    <td><a href="{{ path('module_program.show',{id:module.id}) }}">{{module}}</a></td>
+                    <td><a href="{{ path('category.show',{id:module.category.id}) }}">{{module.category}}</td>
+                
             </tr>
             {% endfor %}
             </tbody>
         </table>
     {% else %}
-        Il n'y a pas de Module . . .
+        <p>Il n'y a pas de Module . . .</p>
     {% endif %}
 
 {% endblock %}

@@ -7,7 +7,7 @@
     <a href="{{path('app_category')}}">Retour</a>
 
     <h1>{{category}}</h1>
-
+    
     <table>
         <thead>
             <td>Nom du Module</td>
@@ -17,7 +17,7 @@
         <tbody>
             {% for module in category.modulePrograms %}
                 <tr>
-                    <td>{{module.name}}</td>
+                    <td><a href="{{path('module_program.show',{id:module.id})}}">{{module.name}}</a></td>
                     <td>
                     {% for user in module.users %}
                         <li>{{user}}</li>

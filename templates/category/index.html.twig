@@ -6,6 +6,8 @@
 
     <h1> Liste des Catégories </h1>
 
+    <a href="{{path('category.new')}}">Ajouter une catégorie</a>
+    
     {% if categories | length > 0 %}
         <table>
             <thead>
@@ -14,7 +16,7 @@
             <tbody>
             {% for category in categories %}
             <tr>
-                <td>{{category}}</td>
+                <td><a href="{{path('category.show',{id:category.id})}}">{{category}}</a></td>
             </tr>
             {% endfor %}
             </tbody>

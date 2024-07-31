@@ -51,4 +51,25 @@ class ModuleProgramController extends AbstractController
             'form'=>$form,
         ]);
     }
+
+    #[Route('/module/show-{id}', name: 'module_program.show',requirements : ['id'=>'\d+'])]
+    public function show(ModuleProgram $moduleProgram): Response
+    {
+        return $this->render('module_program/show.html.twig', [
+            'controller_name' => 'ModuleProgramController',
+            'module'=>$moduleProgram,
+        ]);
+
+
+    }
+
+    #[Route('/module/delete-{id}', name: 'module_program.delete',requirements : ['id'=>'\d+'])]
+    public function delete(ModuleProgram $moduleProgram,EntityManagerInterface $em): Response
+    {
+        $moduleMessage =(string) $moduleProgram;
+        $em->remove($moduleProgram);
+        $em->flush();
+        $this->addFlash('success',"Vous avez bien supprimer $moduleMessage !");
+        return $this->redirectToRoute('app_module_program');
+    }
 }

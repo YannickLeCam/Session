@@ -34,9 +34,7 @@ class ProgramController extends AbstractController
         $form = $this->createForm(ProgramType::class , $program);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid() ) {
-
             $newProgram= $form->getData();
-            dump($newProgram);
             $em->persist($newProgram);
             $em->flush();
             $this->addFlash('success','Vous avez bien ajouté un nouveau program !');
@@ -48,4 +46,6 @@ class ProgramController extends AbstractController
             'form'=>$form,
         ]);
     }
+
+    
 }
