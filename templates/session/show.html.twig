@@ -33,6 +33,7 @@
             </tbody>
         </table>
     </div>
+    <a href="{{path('session.edit',{id:session.id})}}" class="btn btn-warning"> Modifer la session</a>
 
     <h2>Liste des stagiaires participants a la session</h2>
     {% if session.interns | length > 0 %}
@@ -84,7 +85,8 @@
             <tbody>
         {% for program in session.programs %}
                 <tr>
-                    <td>{{program.module}}</td>
+                    <td><a href="{{path('module_program.show',{id:program.module.id})}}">{{program.module}}</a></td>
+                    <td>{{program.duration}}</td>
                     <td><a href="{{path('session.delModule',{id:session.id,programId:program.id})}}"><i class="fa-solid fa-trash-can"></i></a></td>
                 </tr>
         {% endfor %}
@@ -105,12 +107,15 @@
             <tbody>
                 {% for moduleNotIn in modulesNotIn %}
                     <tr>
-                        <td>{{moduleNotIn}}</td>
+                        <td><a href="{{path('module_program.show',{id:moduleNotIn.id})}}">{{moduleNotIn}}</a></td>
                         <td><a href="{{path('session.addModule',{id:session.id,moduleId:moduleNotIn.id,duration:5})}}"><i class="fa-solid fa-plus"></i></a></td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     {% endif %}
+
+    <a href="{{path('session.delete',{id:session.id})}}" class="btn btn-danger"> Supprimer la session</a>
+    
 
 {% endblock %}

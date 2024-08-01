@@ -35,12 +35,23 @@ class SessionController extends AbstractController
         if (!$session) {
             $session = new Session();
         }
-
+        $oldSession = clone $session;
         $form = $this->createForm(SessionType::class , $session);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid() ) {
             $newSession= $form->getData();
-            $newSession->setDateEnd($newSession->getDateStart());
+            if ($newSession->getDateEnd()==null) {
+                $newSession->setDateEnd($newSession->getDateStart());
+            }else {
+                //On compare si le date start a été modifiée
+                if ($oldSession->getDateStart() != $newSession->getDateStart()) {
+                    //On recupere la difference entre les 2 starts et ensuite on la répercute dans la date de fin
+                    $diffDate = $oldSession->getDateStart()->diff($newSession->getDateStart());
+                    $dateEnd = clone $oldSession->getDateEnd();
+                    $newSession->setDateEnd(date_add($dateEnd,$diffDate));
+                }
+            }
+
             $em->persist($newSession);
             $em->flush();
             $this->addFlash('success','Vous avez bien ajouté une nouvelle session !');
