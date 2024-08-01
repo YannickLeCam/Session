@@ -40,6 +40,7 @@ class SessionController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid() ) {
             $newSession= $form->getData();
+            $newSession->setDateEnd($newSession->getDateStart());
             $em->persist($newSession);
             $em->flush();
             $this->addFlash('success','Vous avez bien ajouté une nouvelle session !');
@@ -68,9 +69,13 @@ class SessionController extends AbstractController
     #[Route('/session/addIntern-{id}-{internId}', name: 'session.addIntern',requirements : ['id'=>'\d+','internId'=>'\d+'])]
     public function addIntern(Session $session,int $internId , InternRepository $internRepository, EntityManagerInterface $em): Response
     {   
-        $intern = $internRepository->findOneBy(['id'=>$internId]);
-        $session->addIntern($intern);
-        $em->flush();
+        if ($session->getPlacesRestantes()>0) {        
+            $intern = $internRepository->findOneBy(['id'=>$internId]);
+            $session->addIntern($intern);
+            $em->flush();
+        }else {
+            $this->addFlash('error','Il semble que la session n\'a plus de place');
+        }
         return $this->redirectToRoute('session.show',['id'=>$session->getId()]);
     }
 
@@ -92,15 +97,26 @@ class SessionController extends AbstractController
         $program->setDuration($duration);
         $program->setModule($module);
         $em->persist($program);
+
+        //On modifie la date de fin selon la durée qu'on a ajouté
+        $dateEnd=clone $session->getDateEnd();
+        $session->setDateEnd(date_add($dateEnd,date_interval_create_from_date_string("$duration day")));
+        //dd($session);
+        $em->persist($session);
         $em->flush();
+        // dd();
         return $this->redirectToRoute('session.show',['id'=>$session->getId()]);
     }
 
     #[Route('/session/delModule-{id}-{programId}', name: 'session.delModule',requirements : ['id'=>'\d+','programId'=>'\d+'])]
     public function delModule(Session $session,int $programId, ProgramRepository $programRepository , EntityManagerInterface $em): Response
     {   
+
         $program = $programRepository->findOneBy(['id'=>$programId]);
+        $duration = $program->getDuration();
         $em->remove($program);
+        $dateEnd=clone $session->getDateEnd();
+        $session->setDateEnd(date_sub($dateEnd,date_interval_create_from_date_string("$duration day")));
         $em->flush();
         return $this->redirectToRoute('session.show',['id'=>$session->getId()]);
     }

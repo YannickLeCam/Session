@@ -52,17 +52,17 @@ class SessionType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('dateEnd', DateType::class, [
-                'widget' => 'single_text',
-                'attr' => [
-                    'class' => 'form-control',
-                ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'La date de fin ne peut pas etre vide',
-                    ]),
-                ],
-            ])
+            // ->add('dateEnd', DateType::class, [
+            //     'widget' => 'single_text',
+            //     'attr' => [
+            //         'class' => 'form-control',
+            //     ],
+            //     'constraints' => [
+            //         new NotBlank([
+            //             'message' => 'La date de fin ne peut pas etre vide',
+            //         ]),
+            //     ],
+            // ])
             ->add('places',NumberType::class,[
                 'attr' => [
                     'class' => 'form-control',
