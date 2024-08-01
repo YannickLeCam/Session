@@ -24,9 +24,29 @@
                 <td>Places Restantes</td>
             </thead>
             <tbody>
-                {% for session in user.sessions %}
-                    <tr>
-                        <td>{{session}}</td>
+                {% for session in currentSessions %}
+                    <tr class="current">
+                        <td><a href="{{path('session.show',{id:session.id})}}">{{session}}</a></td>
+                        <td>{{session.description}}</td>
+                        <td>{{session.formattedDateStart}}</td>
+                        <td>{{session.formattedDateEnd}}</td>
+                        <td>{{session.places}}</td>
+                        <td>{{session.placesRestantes}}</td>
+                    </tr>
+                {% endfor %}
+                {% for session in futurSessions %}
+                    <tr class="futur">
+                        <td><a href="{{path('session.show',{id:session.id})}}">{{session}}</a></td>
+                        <td>{{session.description}}</td>
+                        <td>{{session.formattedDateStart}}</td>
+                        <td>{{session.formattedDateEnd}}</td>
+                        <td>{{session.places}}</td>
+                        <td>{{session.placesRestantes}}</td>
+                    </tr>
+                {% endfor %}
+                {% for session in oldSessions %}
+                    <tr class="passed">
+                        <td><a href="{{path('session.show',{id:session.id})}}">{{session}}</a></td>
                         <td>{{session.description}}</td>
                         <td>{{session.formattedDateStart}}</td>
                         <td>{{session.formattedDateEnd}}</td>

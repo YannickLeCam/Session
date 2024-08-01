@@ -45,7 +45,7 @@
             <tbody>
         {% for intern in session.interns %}
                 <tr>
-                    <td>{{intern}}</td>
+                    <td><a href="{{path('intern.show', {id:intern.id})}}">{{intern}}</a></td>
                     <td><a href="{{path('session.delIntern',{id:session.id,internId:intern.id})}}"><i class="fa-solid fa-trash-can"></i></a></td>
                 </tr>
         {% endfor %}
@@ -66,7 +66,7 @@
             <tbody>
                 {% for internNotIn in internsNotIn %}
                     <tr>
-                        <td>{{internNotIn}}</td>
+                        <td><a href="{{path('intern.show', {id:internNotIn.id})}}">{{internNotIn}}</a></td>
                         <td><a href="{{path('session.addIntern',{id:session.id,internId:internNotIn.id})}}"><i class="fa-solid fa-plus"></i></a></td>
                     </tr>
                 {% endfor %}
@@ -108,7 +108,7 @@
                 {% for moduleNotIn in modulesNotIn %}
                     <tr>
                         <td><a href="{{path('module_program.show',{id:moduleNotIn.id})}}">{{moduleNotIn}}</a></td>
-                        <td><a href="{{path('session.addModule',{id:session.id,moduleId:moduleNotIn.id,duration:5})}}"><i class="fa-solid fa-plus"></i></a></td>
+                        <td><a href="{{path('session.addModule',{id:session.id,moduleId:moduleNotIn.id,duration:'0'})}}" class="addModuleButton"><i class="fa-solid fa-plus"></i></a></td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -116,6 +116,7 @@
     {% endif %}
 
     <a href="{{path('session.delete',{id:session.id})}}" class="btn btn-danger"> Supprimer la session</a>
-    
 
 {% endblock %}
+
+

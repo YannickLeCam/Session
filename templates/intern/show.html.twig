@@ -42,7 +42,7 @@
         <tbody>
             {% for session in intern.sessions %}
                 <tr>
-                    <td>{{ session.name }}</td>
+                    <td><a href="{{path('session.show',{id:session.id})}}">{{ session.name }}</a></td>
                     <td>{{ session.description }}</td>
                     <td>{{ session.formattedDateStart }}</td>
                     <td>{{ session.formattedDateEnd }}</td>

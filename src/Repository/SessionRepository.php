@@ -64,6 +64,44 @@ class SessionRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+    public function findSessionPassed($userId)
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.user = :id')  
+            ->andWhere('s.dateEnd < :now')  
+            ->setParameter('id', $userId)
+            ->setParameter('now', new \DateTime())  
+            ->orderBy('s.dateStart', 'ASC')  
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findSessionInComing($userId)
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.user = :id') 
+            ->andWhere('s.dateStart > :now') 
+            ->setParameter('id', $userId)
+            ->setParameter('now', new \DateTime()) 
+            ->orderBy('s.dateStart', 'ASC')  
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findSessionCurrent($userId)
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.user = :id')
+            ->andWhere('s.dateStart < :now')
+            ->andWhere('s.dateEnd > :now')
+            ->setParameter('id', $userId)
+            ->setParameter('now', new \DateTime())
+            ->orderBy('s.dateStart', 'ASC')  
+            ->getQuery()
+            ->getResult();
+    }
+    
+
     //    /**
     //     * @return Session[] Returns an array of Session objects
     //     */

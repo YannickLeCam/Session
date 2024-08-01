@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\SessionRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,11 +51,17 @@ class UserController extends AbstractController
     }
 
     #[Route('user/show-{id}', name: 'user.show',requirements : ['id'=>'\d+'])]
-    public function show(User $user): Response
+    public function show(User $user,SessionRepository $sessionRepository): Response
     {
+        $oldSessions = $sessionRepository->findSessionPassed($user->getId());
+        $futurSessions = $sessionRepository->findSessionInComing($user->getId());
+        $currentSessions =$sessionRepository->findSessionCurrent($user->getId());
         return $this->render('user/show.html.twig', [
             'controller_name' => 'UserController',
             'user'=>$user,
+            'oldSessions'=>$oldSessions,
+            'currentSessions' => $currentSessions,
+            'futurSessions' => $futurSessions,
         ]);
     }
 
