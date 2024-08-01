@@ -64,6 +64,9 @@ class SessionRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+    /**
+     * On recupere les sessions que l'utilisateur a qui sont passées grace a son id
+     */
     public function findSessionPassed($userId)
     {
         return $this->createQueryBuilder('s')
@@ -76,6 +79,9 @@ class SessionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * On recupere les sessions que l'utilisateur a qui sont a venir grace a son id
+     */
     public function findSessionInComing($userId)
     {
         return $this->createQueryBuilder('s')
@@ -88,6 +94,9 @@ class SessionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * On recupere les sessions que l'utilisateur a qui sont en cours grace a son id
+     */
     public function findSessionCurrent($userId)
     {
         return $this->createQueryBuilder('s')

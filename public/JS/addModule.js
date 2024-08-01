@@ -16,7 +16,7 @@ for (let index = 0; index < addModuleButtons.length; index++) {
 
         const input = document.createElement('input');
         input.type = "number";
-        input.min="0";
+        input.setAttribute('min',1);
         formDurationBox.appendChild(input);
 
 

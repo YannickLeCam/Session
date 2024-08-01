@@ -11,6 +11,7 @@ use App\Repository\ModuleProgramRepository;
 use App\Repository\ProgramRepository;
 use App\Repository\SessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use SebastianBergmann\Timer\Duration;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -102,20 +103,24 @@ class SessionController extends AbstractController
     #[Route('/session/addModule-{id}-{moduleId}-{duration}', name: 'session.addModule',requirements : ['id'=>'\d+','moduleId'=>'\d+','duration'=>'\d+'])]
     public function addModule(Session $session,int $moduleId , int $duration , ModuleProgramRepository $moduleRepository, EntityManagerInterface $em): Response
     {   
-        $module = $moduleRepository->findOneBy(['id'=>$moduleId]);
-        $program= new Program();
-        $program->setSession($session);
-        $program->setDuration($duration);
-        $program->setModule($module);
-        $em->persist($program);
 
-        //On modifie la date de fin selon la durée qu'on a ajouté
-        $dateEnd=clone $session->getDateEnd();
-        $session->setDateEnd(date_add($dateEnd,date_interval_create_from_date_string("$duration day")));
-        //dd($session);
-        $em->persist($session);
-        $em->flush();
-        // dd();
+        if ($duration > 0) {
+            $module = $moduleRepository->findOneBy(['id'=>$moduleId]);
+            $program= new Program();
+            $program->setSession($session);
+            $program->setDuration($duration);
+            $program->setModule($module);
+            $em->persist($program);
+    
+            //On modifie la date de fin selon la durée qu'on a ajouté
+            $dateEnd=clone $session->getDateEnd();
+            $session->setDateEnd(date_add($dateEnd,date_interval_create_from_date_string("$duration day")));
+
+            $em->persist($session);
+            $em->flush();
+
+        }
+
         return $this->redirectToRoute('session.show',['id'=>$session->getId()]);
     }
 
