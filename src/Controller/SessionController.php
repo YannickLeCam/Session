@@ -75,7 +75,7 @@ class SessionController extends AbstractController
     }
 
     #[Route('/session/delIntern-{id}-{internId}', name: 'session.delIntern',requirements : ['id'=>'\d+','internId'=>'\d+'])]
-    public function delIntern(Session $session,int $internId , int $duration , InternRepository $internRepository,EntityManagerInterface $em): Response
+    public function delIntern(Session $session,int $internId , InternRepository $internRepository,EntityManagerInterface $em): Response
     {   
         $intern = $internRepository->findOneBy(['id'=>$internId]);
         $session->removeIntern($intern);
@@ -100,7 +100,7 @@ class SessionController extends AbstractController
     public function delModule(Session $session,int $programId, ProgramRepository $programRepository , EntityManagerInterface $em): Response
     {   
         $program = $programRepository->findOneBy(['id'=>$programId]);
-        $session->removeProgram($program);
+        $em->remove($program);
         $em->flush();
         return $this->redirectToRoute('session.show',['id'=>$session->getId()]);
     }

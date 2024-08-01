@@ -41,15 +41,16 @@ class SessionRepository extends ServiceEntityRepository
     }
 
     public function findModulesProgramsNotIn($sessionId){
+
         $em = $this->getEntityManager();
         $sub = $em->createQueryBuilder();
 
         $queryBuilder = $sub;
 
         $queryBuilder->select('s')
-            ->from('App\Entity\Program','s')
-            ->leftJoin('s.session','se')
-            ->where('se.id = :id');
+            ->from('App\Entity\ModuleProgram','s')
+            ->leftJoin('s.programs','se')
+            ->where('se.session = :id');
         
         $sub = $em->createQueryBuilder();
 
