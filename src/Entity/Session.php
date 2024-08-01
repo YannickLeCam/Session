@@ -207,6 +207,11 @@ class Session
 
         return $this->dateStart->format('d/m/Y');
     }
+
+    public function getDuration(): ?string{
+        $dateEnd = $this->dateEnd;
+        return $dateEnd->diff($this->dateStart,true)->days; 
+    }
     public function __toString()
     {
         return $this->name;
