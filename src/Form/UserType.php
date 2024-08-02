@@ -56,6 +56,17 @@ class UserType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('passwordConfirm',PasswordType::class, [
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le mot de passe ne peut pas être vide.',
+                    ]),
+                    new Regex([
+                        'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{12,}$/',
+                        'message' => 'Le mot de passe doit contenir au moins 12 caractères, y compris une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.',
+                    ]),
+                ],
+            ])
             ->add('modulePrograms', EntityType::class, [
                 'class' => ModuleProgram::class,
                 'choice_label' => 'name',
