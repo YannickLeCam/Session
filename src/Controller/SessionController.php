@@ -124,6 +124,7 @@ class SessionController extends AbstractController
         return $this->redirectToRoute('session.show',['id'=>$session->getId()]);
     }
 
+
     #[Route('/session/delModule-{id}-{programId}', name: 'session.delModule',requirements : ['id'=>'\d+','programId'=>'\d+'])]
     public function delModule(Session $session,int $programId, ProgramRepository $programRepository , EntityManagerInterface $em): Response
     {   

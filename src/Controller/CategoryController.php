@@ -65,6 +65,6 @@ class CategoryController extends AbstractController
         $em->remove($category);
         $em->flush();
         $this->addFlash('success',"Vous avez bien supprimer $categoryMessage !");
-        return $this->redirectToRoute('app_intern');
+        return $this->redirectToRoute('app_category');
     }
 }

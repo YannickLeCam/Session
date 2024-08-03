@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Program;
+use App\Entity\Session;
 use App\Form\ProgramType;
 use App\Repository\ProgramRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -45,6 +46,21 @@ class ProgramController extends AbstractController
             'controller_name' => 'ProgramController',
             'form'=>$form,
         ]);
+    }
+
+    #[Route('program/edit-{id}-{duration}', name: 'program.editSession',requirements : ['id'=>'\d+','duration'=>'\d+'])]
+    public function editBySession( Program $program,int $duration,EntityManagerInterface $em): Response
+    {
+
+        if ($duration>0) {
+            $program->setDuration($duration);
+            $em->flush();
+            
+            $this->addFlash('success','Vous avez bien modifier le program !');
+        }else {
+            $this->addFlash('error','La durée ne semble pas etre valide');
+        }
+        return $this->redirectToRoute('session.show',['id'=>$program->getSession()->getId()]);
     }
 
     #[Route('program/show-{id}', name: 'program.show',requirements : ['id'=>'\d+'])]
