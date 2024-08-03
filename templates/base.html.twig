@@ -22,27 +22,42 @@
               <a class="navbar-brand" href="#">Navbar</a>
               <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  {% if app.user %}
+                    <li class="nav-item">
+                      <a class="nav-link {{ (controller_name == 'Home') ? 'active' : '' }}" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link {{ (controller_name == 'UserController') ? 'active' : '' }}" aria-current="page" href="{{path('app_user')}}">Utilisateurs</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link {{ (controller_name == 'InternController') ? 'active' : '' }}" aria-current="page" href="{{path('app_intern')}}">Stagiaires</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link {{ (controller_name == 'ModuleProgramController') ? 'active' : '' }}" aria-current="page" href="{{path('app_module_program')}}">Modules</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link {{ (controller_name == 'ProgramController') ? 'active' : '' }}" aria-current="page" href="{{path('app_program')}}">Programes</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link {{ (controller_name == 'SessionController') ? 'active' : '' }}" aria-current="page" href="{{path('app_session')}}">Sessions</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link {{ (controller_name == 'CategoryController') ? 'active' : '' }}" aria-current="page" href="{{path('app_category')}}">Catégories</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link {{ (controller_name == 'ProfileController') ? 'active' : '' }}" aria-current="page" href="{{path('app_login')}}">{{app.user.firstName}} {{app.user.name}}</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" aria-current="page" href="{{path('app_logout')}}">Se deconnecter</a>
+                    </li>
+                  {% else %}
                   <li class="nav-item">
-                    <a class="nav-link {{ (controller_name == 'Home') ? 'active' : '' }}" aria-current="page" href="#">Home</a>
+                    <a class="nav-link {{ (controller_name == 'LoginController') ? 'active' : '' }}" aria-current="page" href="{{path('app_login')}}">Se Connecter</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link {{ (controller_name == 'UserController') ? 'active' : '' }}" aria-current="page" href="{{path('app_user')}}">Utilisateurs</a>
+                    <a class="nav-link {{ (controller_name == 'RegisterController') ? 'active' : '' }}" aria-current="page" href="{{path('app_register')}}">S'inscrire</a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link {{ (controller_name == 'InternController') ? 'active' : '' }}" aria-current="page" href="{{path('app_intern')}}">Stagiaires</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link {{ (controller_name == 'ModuleProgramController') ? 'active' : '' }}" aria-current="page" href="{{path('app_module_program')}}">Modules</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link {{ (controller_name == 'ProgramController') ? 'active' : '' }}" aria-current="page" href="{{path('app_program')}}">Programes</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link {{ (controller_name == 'SessionController') ? 'active' : '' }}" aria-current="page" href="{{path('app_session')}}">Sessions</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link {{ (controller_name == 'CategoryController') ? 'active' : '' }}" aria-current="page" href="{{path('app_category')}}">Catégories</a>
-                  </li>
+                  {% endif %}
                 </ul>
                 <form class="d-flex" role="search">
                   <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
