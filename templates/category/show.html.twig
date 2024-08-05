@@ -20,18 +20,23 @@
                     <td><a href="{{path('module_program.show',{id:module.id})}}">{{module.name}}</a></td>
                     <td>
                     {% for user in module.users %}
-                        <li>{{user}}</li>
+                        <li><a href="{{path('user.show',{id:user.id})}}">{{user}}</a></li>
                     {% endfor %}
                     </td>
                     <td>
-                        <table>
-                        {% for program in module.programs %}
-                            <tr>
-                                <td>{{program.session}} </td>
-                                <td>{{program.duration}} jours</td>
-                            </tr>
-                        {% endfor %}
-                        </table>
+                        {% if module.programs | length > 0 %}
+                            <table>
+                            {% for program in module.programs %}
+                                <tr>
+                                    <td><a href="{{path('session.show',{id:program.session.id})}}">{{program.session}}</a> </td>
+                                    <td>{{program.duration}} jours</td>
+                                </tr>
+                            {% endfor %}
+                            </table>
+                        {% else %}
+                            <p>Il n'y a pas encore de session pour ce module ...</p>
+                        {% endif %}
+
 
                     </td>
                 </tr>
