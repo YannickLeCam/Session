@@ -30,10 +30,12 @@ class InternRepository extends ServiceEntityRepository
         $sub = $em->createQueryBuilder();
 
         $sub->select('st')
-            ->from('App\Entity\Session','st')
+            ->from('App\Entity\Session', 'st')
             ->where($sub->expr()->notIn('st.id', $queryBuilder->getDQL()))
-            ->setParameter('id',$internId)
-            ->orderBy('st.name')
+            ->andWhere('st.dateStart >= :today') 
+            ->setParameter('id', $internId)
+            ->setParameter('today', new \DateTime('today'))
+            ->orderBy('st.name');
         ;
 
         $query = $sub->getQuery();
