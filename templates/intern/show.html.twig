@@ -56,4 +56,37 @@
     <p>Pas encore inscrit à une session</p>
 {% endif %}
 
+<h2>Les sessions ou le stagiaire n'est pas encore inscrit</h2>
+
+{% if listSessionsNotIn | length > 0 %}
+    <table>
+        <thead>
+            <tr>
+                <th>Titre de la session</th>
+                <th>Description de la session</th>
+                <th>Date de commencement</th>
+                <th>Date de fin</th>
+                <th>Places</th>
+                <th>Places restantes</th>
+                <th>Ajouter</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for session in listSessionsNotIn %}
+                <tr>
+                    <td><a href="{{path('session.show',{id:session.id})}}">{{ session.name }}</a></td>
+                    <td>{{ session.description }}</td>
+                    <td>{{ session.formattedDateStart }}</td>
+                    <td>{{ session.formattedDateEnd }}</td>
+                    <td>{{ session.places }}</td>
+                    <td>{{ session.placesRestantes }}</td>
+                    <td><a href="{{path('intern.addSession',{id:intern.id,sessionId:session.id})}}"><i class="fa-solid fa-plus"></i></a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Pas encore de session ou le stagiaire peut s'inscrire</p>
+{% endif %}
+
 {% endblock %}

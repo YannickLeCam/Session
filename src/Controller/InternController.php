@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Intern;
 use App\Form\InternType;
 use App\Repository\InternRepository;
+use App\Repository\SessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,13 +50,29 @@ class InternController extends AbstractController
     }
 
     #[Route('/intern/show-{id}', name: 'intern.show',requirements : ['id'=>'\d+'])]
-    public function show(Intern $intern): Response
-    {
+    public function show(Intern $intern,InternRepository $internRepository): Response
+    {   
+        $listSessionsNotIn = $internRepository->findSessionsNotIn($intern->getId());
+    
 
         return $this->render('intern/show.html.twig', [
             'controller_name' => 'InternController',
             'intern'=>$intern,
+            'listSessionsNotIn' => $listSessionsNotIn,
         ]);
+    }
+
+    #[Route('/intern/addSession-{id}-{sessionId}', name: 'intern.addSession',requirements : ['id'=>'\d+','sessionId'=>'\d+'])]
+    public function addSession(Intern $intern,int $sessionId , SessionRepository $sessionRepository, EntityManagerInterface $em): Response
+    {   
+        $session = $sessionRepository->findOneBy(['id'=>$sessionId]);
+        if ($session->getPlacesRestantes()>0) {        
+            $session->addIntern($intern);
+            $em->flush();
+        }else {
+            $this->addFlash('error','Il semble que la session n\'a plus de place');
+        }
+        return $this->redirectToRoute('intern.show',['id'=>$intern->getId()]);
     }
 
     #[Route('/intern/delete-{id}', name: 'intern.delete',requirements : ['id'=>'\d+'])]

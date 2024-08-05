@@ -16,6 +16,29 @@ class InternRepository extends ServiceEntityRepository
         parent::__construct($registry, Intern::class);
     }
 
+    public function findSessionsNotIn($internId){
+        $em = $this->getEntityManager();
+        $sub = $em->createQueryBuilder();
+
+        $queryBuilder = $sub;
+
+        $queryBuilder->select('s')
+            ->from('App\Entity\Session','s')
+            ->leftJoin('s.interns','se')
+            ->where('se.id = :id');
+        
+        $sub = $em->createQueryBuilder();
+
+        $sub->select('st')
+            ->from('App\Entity\Session','st')
+            ->where($sub->expr()->notIn('st.id', $queryBuilder->getDQL()))
+            ->setParameter('id',$internId)
+            ->orderBy('st.name')
+        ;
+
+        $query = $sub->getQuery();
+        return $query->getResult();
+    }
     //    /**
     //     * @return Intern[] Returns an array of Intern objects
     //     */
