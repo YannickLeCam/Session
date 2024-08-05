@@ -6,6 +6,7 @@ use App\Entity\ModuleProgram;
 use App\Form\ModuleProgramType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ModuleProgramRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -53,14 +54,44 @@ class ModuleProgramController extends AbstractController
     }
 
     #[Route('/module/show-{id}', name: 'module_program.show',requirements : ['id'=>'\d+'])]
-    public function show(ModuleProgram $moduleProgram): Response
+    public function show(ModuleProgram $moduleProgram,ModuleProgramRepository $moduleProgramRepository): Response
     {
+        $usersNotIn=$moduleProgramRepository->findUsersNotIn($moduleProgram->getId());
         return $this->render('module_program/show.html.twig', [
             'controller_name' => 'ModuleProgramController',
             'module'=>$moduleProgram,
+            'usersNotIn' => $usersNotIn,
         ]);
+    }
+    
+    #[Route('/module/addUser-{id}-{idUser}', name: 'module_program.addUser',requirements : ['id'=>'\d+','idUser'=>'\d+'])]
+    public function addUser(ModuleProgram $moduleProgram,int $idUser ,UserRepository $userRepository, EntityManagerInterface $em): Response
+    {
+        $user=$userRepository->findOneBy(['id'=>$idUser]);
+        if ($user ) {
+            $moduleProgram->addUser($user);
+            $em->flush();
+            $this->addFlash('success',"Vous avez bien ajouter $user au module !");
 
+        }else {
+            $this->addFlash('error','Il semble avoir un probleme avec l\'utilisateur . . .');
+        }
+        return $this->redirectToRoute('module_program.show',['id'=>$moduleProgram->getId()]);
+    }
 
+    #[Route('/module/delUser-{id}-{idUser}', name: 'module_program.delUser',requirements : ['id'=>'\d+','idUser'=>'\d+'])]
+    public function delUser(ModuleProgram $moduleProgram,int $idUser ,UserRepository $userRepository, EntityManagerInterface $em): Response
+    {
+        $user=$userRepository->findOneBy(['id'=>$idUser]);
+        if ($user ) {
+            $moduleProgram->removeUser($user);
+            $em->flush();
+            $this->addFlash('success',"Vous avez bien enlever $user au module !");
+
+        }else {
+            $this->addFlash('error','Il semble avoir un probleme avec l\'utilisateur . . .');
+        }
+        return $this->redirectToRoute('module_program.show',['id'=>$moduleProgram->getId()]);
     }
 
     #[Route('/module/delete-{id}', name: 'module_program.delete',requirements : ['id'=>'\d+'])]

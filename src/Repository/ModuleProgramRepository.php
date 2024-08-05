@@ -16,6 +16,30 @@ class ModuleProgramRepository extends ServiceEntityRepository
         parent::__construct($registry, ModuleProgram::class);
     }
 
+    public function findUsersNotIn($moduleId){
+        $em = $this->getEntityManager();
+        $sub = $em->createQueryBuilder();
+
+        $queryBuilder = $sub;
+
+        $queryBuilder->select('s')
+            ->from('App\Entity\User','s')
+            ->leftJoin('s.modulePrograms','se')
+            ->where('se.id = :id');
+        
+        $sub = $em->createQueryBuilder();
+
+        $sub->select('st')
+            ->from('App\Entity\User','st')
+            ->where($sub->expr()->notIn('st.id', $queryBuilder->getDQL()))
+            ->setParameter('id',$moduleId)
+            ->orderBy('st.name')
+        ;
+
+        $query = $sub->getQuery();
+        return $query->getResult();
+    }
+
     //    /**
     //     * @return ModuleProgram[] Returns an array of ModuleProgram objects
     //     */
