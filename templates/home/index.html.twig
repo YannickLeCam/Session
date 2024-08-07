@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+<button id="ajaxButton">Obtenir la session actuelle</button>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.getElementById('ajaxButton').addEventListener('click', function() {
+        {% if app.user %}
+            var userId = {{ app.user.id }};
+
+            $.ajax({
+                url: '{{ path('user.currentAjax', {'id': app.user.id}) }}',
+                type: 'GET',
+                success: function(response) {
+                    console.log('Réponse du serveur:', response);
+                    alert('Session actuelle: ' + JSON.stringify(response));
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Erreur AJAX:', textStatus, errorThrown);
+                }
+            });
+        {% else %}
+            alert('Vous devez être connecté pour obtenir la session actuelle.');
+        {% endif %}
+    });
+</script>
+{% endblock %}
+

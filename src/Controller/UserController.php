@@ -4,12 +4,14 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
-use App\Repository\SessionRepository;
 use App\Repository\UserRepository;
+use App\Repository\SessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class UserController extends AbstractController
@@ -73,5 +75,26 @@ class UserController extends AbstractController
         $em->flush();
         $this->addFlash('success',"Vous avez bien supprimer $userMessage !");
         return $this->redirectToRoute('app_user');
+    }
+
+    #[Route('/user/getCurrentSession-{id}', name: 'user.currentAjax',requirements : ['id'=>'\d+'])]
+    #[IsGranted('ROLE_USER')]
+    public function getCurrentSessionAjax(User $user,SessionRepository $sessionRepository): JsonResponse
+    {
+        $sessions = $sessionRepository->findSessionCurrent($user->getId());
+
+        if (!$sessions) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Session non trouvée'], 404);
+        }
+
+        $data = array_map(function ($session) {
+            return [
+                'id' => $session->getId(),
+                'name' => $session->getName(), 
+                'dateStart' => $session->getFormattedDateStart(),
+            ];
+        }, $sessions);
+
+        return new JsonResponse($data);
     }
 }
