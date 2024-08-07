@@ -11,9 +11,9 @@
     <table id="currentSessions" style="display:none;">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Nom</th>
-                <th>Début</th>
+                <th>Date de début</th>
+                <th>Date de fin</th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -22,7 +22,6 @@
     <table id="futureSessions" style="display:none;">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Nom</th>
                 <th>Début</th>
             </tr>
@@ -45,11 +44,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        function loadSessions(type) {
-            if (type == null) {
-                type = 'current';
-            }
-    
+        function loadSessions(type) {  
             // Construire l'URL avec le bon type
             var url = '{{ path('user.currentAjax', {'id': app.user.id, 'type': 'type' }) }}';
             url = url.replace('{{ app.user.id }}', {{app.user.id}}).replace('type', type);
@@ -58,6 +53,7 @@
                 url: url,
                 type: 'GET',
                 success: function(response) {
+                    $('thead').show();
                     let tableId;
                     switch(type) {
                         case 'current':
@@ -73,18 +69,24 @@
     
                     $(tableId + ' tbody').empty();
                     console.log(response);
+                    if (response.lenght == 0) {
+                        $(tableId + " tbody").append('<p> N\'y a pas de session </p>')
+                    }
                     response.forEach(function(session) {
-                        $(tableId + ' tbody').append('<tr><td>' + session.id + '</td><td>' + session.name + '</td><td>' + session.dateStart + '</td><td>' + session.dateEnd + '</td></tr>');
+                        $(tableId + ' tbody').append('<tr><td>' + session.name + '</td><td>' + session.dateStart + '</td><td>' + session.dateEnd + '</td></tr>');
                     });
                     $('#tables table').hide(); 
                     $(tableId).show();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
+                    $('tbody').empty();
+                    $('thead').hide();
                     console.error('Erreur AJAX:', textStatus, errorThrown);
+                    $("tbody").append('<p> N\'y a pas de session dans cette rubrique </p>')
                 }
             });
         }
-    
+        
         $('#currentButton').click(function() {
             loadSessions('current');
         });
@@ -96,6 +98,8 @@
         $('#pastButton').click(function() {
             loadSessions('past');
         });
+
+        loadSessions('current');
     });
 </script>
 {% endblock %}

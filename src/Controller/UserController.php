@@ -82,35 +82,40 @@ class UserController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function getCurrentSessionAjax(User $user,SessionRepository $sessionRepository, SerializerInterface $serializer, string $type): JsonResponse
     {
-        switch ($type) {
-            case 'current':
-                $sessions = $sessionRepository->findSessionCurrent($user->getId());
-                break;
-            case 'future':
-                $sessions = $sessionRepository->findSessionInComing($user->getId());
-                break;
-            case 'past':
-                $sessions = $sessionRepository->findSessionPassed($user->getId());
-                break;
-            default:
-                return new JsonResponse(['status' => 'error', 'message' => 'Type de session non valide'], 400);
+        if ($this->getUser()->getId()=== $user->getId()) {
+
+            switch ($type) {
+                case 'current':
+                    $sessions = $sessionRepository->findSessionCurrent($user->getId());
+                    break;
+                case 'future':
+                    $sessions = $sessionRepository->findSessionInComing($user->getId());
+                    break;
+                case 'past':
+                    $sessions = $sessionRepository->findSessionPassed($user->getId());
+                    break;
+                default:
+                    return new JsonResponse(['status' => 'error', 'message' => 'Type de session non valide'], 400);
+            }
+
+            if (!$sessions) {
+                return new JsonResponse(['status' => 'error', 'message' => 'Session non trouvée'], 404);
+            }
+            $data = array_map(function ($session) {
+                return [
+                    'id' => $session->getId(),
+                    'name' => $session->getName(),
+                    'dateStart' => $session->getFormattedDateStart(),
+                    'dateEnd' => $session->getFormattedDateEnd(),
+    
+                ];
+            }, $sessions);
+    
+            return new JsonResponse($data);
+        }else {
+            return new JsonResponse(['status' => 'error', 'message' => 'Utilisateur invalide . . .'], 404);
         }
 
-        if (!$sessions) {
-            return new JsonResponse(['status' => 'error', 'message' => 'Session non trouvée'], 404);
-        }
 
-
-        $data = array_map(function ($session) {
-            return [
-                'id' => $session->getId(),
-                'name' => $session->getName(),
-                'dateStart' => $session->getFormattedDateStart(),
-                'dateEnd' => $session->getFormattedDateEnd(),
-
-            ];
-        }, $sessions);
-
-        return new JsonResponse($data);
     }
 }
