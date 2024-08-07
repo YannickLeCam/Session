@@ -3,28 +3,99 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-<button id="ajaxButton">Obtenir la session actuelle</button>
+<button id="currentButton">Sessions en cours</button>
+<button id="futureButton">Sessions futures</button>
+<button id="pastButton">Sessions passées</button>
+
+<div id="tables">
+    <table id="currentSessions" style="display:none;">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Début</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <table id="futureSessions" style="display:none;">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Début</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <table id="pastSessions" style="display:none;">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Début</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    document.getElementById('ajaxButton').addEventListener('click', function() {
-        {% if app.user %}
-            var userId = {{ app.user.id }};
-
+    $(document).ready(function() {
+        function loadSessions(type) {
+            if (type == null) {
+                type = 'current';
+            }
+    
+            // Construire l'URL avec le bon type
+            var url = '{{ path('user.currentAjax', {'id': app.user.id, 'type': 'type' }) }}';
+            url = url.replace('{{ app.user.id }}', {{app.user.id}}).replace('type', type);
+            console.log(url);
             $.ajax({
-                url: '{{ path('user.currentAjax', {'id': app.user.id}) }}',
+                url: url,
                 type: 'GET',
                 success: function(response) {
-                    console.log('Réponse du serveur:', response);
-                    alert('Session actuelle: ' + JSON.stringify(response));
+                    let tableId;
+                    switch(type) {
+                        case 'current':
+                            tableId = '#currentSessions';
+                            break;
+                        case 'future':
+                            tableId = '#futureSessions';
+                            break;
+                        case 'past':
+                            tableId = '#pastSessions';
+                            break;
+                    }
+    
+                    $(tableId + ' tbody').empty();
+                    console.log(response);
+                    response.forEach(function(session) {
+                        $(tableId + ' tbody').append('<tr><td>' + session.id + '</td><td>' + session.name + '</td><td>' + session.dateStart + '</td><td>' + session.dateEnd + '</td></tr>');
+                    });
+                    $('#tables table').hide(); 
+                    $(tableId).show();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.error('Erreur AJAX:', textStatus, errorThrown);
                 }
             });
-        {% else %}
-            alert('Vous devez être connecté pour obtenir la session actuelle.');
-        {% endif %}
+        }
+    
+        $('#currentButton').click(function() {
+            loadSessions('current');
+        });
+    
+        $('#futureButton').click(function() {
+            loadSessions('future');
+        });
+    
+        $('#pastButton').click(function() {
+            loadSessions('past');
+        });
     });
 </script>
 {% endblock %}

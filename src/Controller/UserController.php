@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -77,21 +78,36 @@ class UserController extends AbstractController
         return $this->redirectToRoute('app_user');
     }
 
-    #[Route('/user/getCurrentSession-{id}', name: 'user.currentAjax',requirements : ['id'=>'\d+'])]
+    #[Route('/user/getCurrentSession-{id}-{type}', name: 'user.currentAjax', requirements: ['id' => '\d+', 'type' => 'current|future|past|'])]
     #[IsGranted('ROLE_USER')]
-    public function getCurrentSessionAjax(User $user,SessionRepository $sessionRepository): JsonResponse
+    public function getCurrentSessionAjax(User $user,SessionRepository $sessionRepository, SerializerInterface $serializer, string $type): JsonResponse
     {
-        $sessions = $sessionRepository->findSessionCurrent($user->getId());
+        switch ($type) {
+            case 'current':
+                $sessions = $sessionRepository->findSessionCurrent($user->getId());
+                break;
+            case 'future':
+                $sessions = $sessionRepository->findSessionInComing($user->getId());
+                break;
+            case 'past':
+                $sessions = $sessionRepository->findSessionPassed($user->getId());
+                break;
+            default:
+                return new JsonResponse(['status' => 'error', 'message' => 'Type de session non valide'], 400);
+        }
 
         if (!$sessions) {
             return new JsonResponse(['status' => 'error', 'message' => 'Session non trouvée'], 404);
         }
 
+
         $data = array_map(function ($session) {
             return [
                 'id' => $session->getId(),
-                'name' => $session->getName(), 
+                'name' => $session->getName(),
                 'dateStart' => $session->getFormattedDateStart(),
+                'dateEnd' => $session->getFormattedDateEnd(),
+
             ];
         }, $sessions);
 
