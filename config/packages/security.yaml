@@ -40,6 +40,7 @@ security:
         - { path: ^/session, roles: ROLE_USER }
         - { path: ^/module, roles: ROLE_USER }
         - { path: ^/program, roles: ROLE_USER }
+        - { path: ^/home, roles: ROLE_USER }
 
 when@test:
     security:

@@ -3,9 +3,16 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
+
+
+<h1>Bienvenue {{user}} !</h1>
+
 <button id="currentButton">Sessions en cours</button>
 <button id="futureButton">Sessions futures</button>
 <button id="pastButton">Sessions passées</button>
+
+
+
 
 <div id="tables">
     <table id="currentSessions" style="display:none;">
@@ -41,32 +48,47 @@
     </table>
 </div>
 
+<div id="modules">
+    <table>
+        <thead>
+            <tr>
+                <th>Nom du module</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for module in user.modulePrograms %}
+                <td><a href="{{path('module_program.show',{id:module.id})}}">{{module}}</a></td>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
         function loadSessions(type) {  
             // Construire l'URL avec le bon type
+            let tableId;
+            switch(type) {
+                case 'current':
+                    tableId = '#currentSessions';
+                    break;
+                case 'future':
+                    tableId = '#futureSessions';
+                    break;
+                case 'past':
+                    tableId = '#pastSessions';
+                    break;
+            }
             var url = '{{ path('user.currentAjax', {'id': app.user.id, 'type': 'type' }) }}';
             url = url.replace('{{ app.user.id }}', {{app.user.id}}).replace('type', type);
             console.log(url);
             $.ajax({
                 url: url,
                 type: 'GET',
+                
                 success: function(response) {
                     $('thead').show();
-                    let tableId;
-                    switch(type) {
-                        case 'current':
-                            tableId = '#currentSessions';
-                            break;
-                        case 'future':
-                            tableId = '#futureSessions';
-                            break;
-                        case 'past':
-                            tableId = '#pastSessions';
-                            break;
-                    }
-    
                     $(tableId + ' tbody').empty();
                     console.log(response);
                     if (response.lenght == 0) {
@@ -79,10 +101,11 @@
                     $(tableId).show();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    $('tbody').empty();
-                    $('thead').hide();
+
+                    $(tableId + ' tbody').empty();
+                    $(tableId + ' thead').hide();
                     console.error('Erreur AJAX:', textStatus, errorThrown);
-                    $("tbody").append('<p> N\'y a pas de session dans cette rubrique </p>')
+                    $(tableId + ' tbody').append('<p> N\'y a pas de session dans cette rubrique </p>')
                 }
             });
         }
