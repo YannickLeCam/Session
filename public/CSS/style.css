@@ -1,0 +1,16 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root{
+    --gris : rgb(83, 83, 83);
+    --violet : rgb(122, 70, 165);
+    --violetHover : rgb(112, 112, 112);
+    --grisHover : rgb(159, 93, 212);
+}
+
+body{
+    background-color: var(--gris) !important;
+}
