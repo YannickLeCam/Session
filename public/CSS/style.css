@@ -6,11 +6,53 @@
 
 :root{
     --gris : rgb(83, 83, 83);
-    --violet : rgb(122, 70, 165);
-    --violetHover : rgb(112, 112, 112);
-    --grisHover : rgb(159, 93, 212);
+    --violet : rgb(138, 108, 206);
+    --grisHover : rgb(112, 112, 112);
+    --violetHover : rgb(164, 134, 189);
 }
 
 body{
     background-color: var(--gris) !important;
+}
+
+#wrapper{
+    display: flex;
+    flex-direction: column;
+}
+
+/*
+LOGS PART
+*/
+#FormLogIn{
+    border: 4px solid var(--violet);
+    padding: 2% 5%;
+    margin: 10% 20%;
+    border-radius: 16px;
+    background-color: var(--grisHover);
+}
+
+#FormLogIn h3 {
+    color: white;
+    margin-bottom: 3%;
+    text-align: center;
+    font-size: xx-large;
+}
+
+#FormLogIn label {
+    color: white;
+    margin: 3% 0;
+    font-size: x-large;
+}
+
+#FormLogIn .btn{
+    
+    background-color: var(--violet);
+    border-color: var(--violet);
+}
+
+#buttonDiv {
+    display: flex;
+    margin:5% 0;
+    align-items: center;
+    justify-content: center;
 }
