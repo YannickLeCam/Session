@@ -35,24 +35,35 @@ LOGS PART
     color: white;
     margin-bottom: 3%;
     text-align: center;
-    font-size: xx-large;
+    font-size: 4vw;
+    font-family: "Anton", sans-serif;
+    font-weight: 400;
 }
 
 #FormLogIn label {
     color: white;
-    margin: 3% 0;
-    font-size: x-large;
+    margin-top: 3%;
+    font-family: "Anton", sans-serif;
+    font-weight: 400;
+    font-size: 1.5vw;
 }
 
 #FormLogIn .btn{
     
     background-color: var(--violet);
     border-color: var(--violet);
+    font-family: "Anton", sans-serif;
+    font-size: 1.5vw;
+}
+
+#FormLogIn .btn:hover{
+    background-color: var(--violetHover);
+    transition: 0.3s;
 }
 
 #buttonDiv {
     display: flex;
-    margin:5% 0;
+    margin-top:5%;
     align-items: center;
     justify-content: center;
 }
