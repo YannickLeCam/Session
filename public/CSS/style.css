@@ -9,6 +9,7 @@
     --violet : rgb(138, 108, 206);
     --grisHover : rgb(112, 112, 112);
     --violetHover : rgb(164, 134, 189);
+    --white : rgb(255,255,255);
 }
 
 body{
@@ -32,7 +33,7 @@ LOGS PART
 }
 
 #FormLogIn h3 {
-    color: white;
+    color: var(--white);
     margin-bottom: 3%;
     text-align: center;
     font-size: 4vw;
@@ -41,7 +42,7 @@ LOGS PART
 }
 
 #FormLogIn label {
-    color: white;
+    color: var(--white);
     margin-top: 3%;
     font-family: "Anton", sans-serif;
     font-weight: 400;
