@@ -75,7 +75,6 @@ NAV PARTS
 
 .navbar{
     background-color: var(--gris) !important;
-    padding: 0 !important;
 }
 
 nav::after{
@@ -95,12 +94,31 @@ nav ul{
     height: 100% !important;
 }
 
-.nav-item:hover{
-    background-color: var(--grisHover) !important;
+.nav-item,.dropdown-item{
+    position: relative;
+}
+
+.nav-item::after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--violet);
+    transform-origin: bottom right;
+    transition: transform 0.5s ease-out;
+}
+
+.nav-item:hover::after, .nav-item .active{
+    transform: scaleX(1);
+    transform-origin: bottom left;
 }
 
 .nav-link{
     color: var(--violet) !important;
+    text-transform: uppercase;
 }
 
 .nav-link::after{
@@ -108,7 +126,6 @@ nav ul{
 }
 
 .active{
-    color: var(--violet);
-    transition: 0.3s;
+    font-weight: 900;
 }
 
