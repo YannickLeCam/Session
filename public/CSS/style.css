@@ -68,3 +68,47 @@ LOGS PART
     align-items: center;
     justify-content: center;
 }
+
+/*
+NAV PARTS
+*/
+
+.navbar{
+    background-color: var(--gris) !important;
+    padding: 0 !important;
+}
+
+nav::after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(1);
+    height: 4px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--violet);
+    transform-origin: bottom right;
+    transition: transform 0.5s ease-out;
+}
+
+nav ul{
+    height: 100% !important;
+}
+
+.nav-item:hover{
+    background-color: var(--grisHover) !important;
+}
+
+.nav-link{
+    color: var(--violet) !important;
+}
+
+.nav-link::after{
+    color: var(--violet);
+}
+
+.active{
+    color: var(--violet);
+    transition: 0.3s;
+}
+
