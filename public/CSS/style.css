@@ -59,6 +59,7 @@ form .btn{
 
 form .btn:hover{
     background-color: var(--violetHover);
+    border: none;
     transition: 0.3s;
 }
 
