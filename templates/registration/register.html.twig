@@ -48,12 +48,14 @@
         </div>
 
         <div class="form-check mb-3">
-            {{ form_row(registrationForm.agreeTerms, {
-                label: 'Acceptez-vous les termes',
-                label_attr: {'class': 'form-check-label'} 
-            
+            {{ form_widget(registrationForm.agreeTerms, {
+                'attr': {'class': 'form-check-input custom-checkbox', 'id': 'btn-check-2-outlined', 'autocomplete': 'off'}
+            }) }}
+            {{ form_label(registrationForm.agreeTerms, 'Acceptez-vous les termes', {
+                'label_attr': {'for': 'btn-check-2-outlined'}
             }) }}
         </div>
+        
 
         <div id="buttonDiv">
             <button type="submit" class="btn btn-primary">S'inscrire</button>

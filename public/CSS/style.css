@@ -9,6 +9,7 @@
     --violet : rgb(138, 108, 206);
     --grisHover : rgb(112, 112, 112);
     --violetHover : rgb(164, 134, 189);
+    --lavander : rgb(238, 218, 255);
     --white : rgb(255,255,255);
 }
 
@@ -131,6 +132,20 @@ nav ul{
 }
 
 /*
-FOR REGISTER
+FORM REGISTER
 */
+
+.form-check-input{
+    background-color: var(--lavander) ;
+}
+
+.form-check-input:checked{
+    background-color: var(--violet);
+    border-color: var(--violet);
+}
+
+.form-check-input:focus{
+    box-shadow: var(--violetHover);
+    border: var(--violet);
+}
 
