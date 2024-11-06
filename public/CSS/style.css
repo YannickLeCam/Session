@@ -159,3 +159,13 @@ FORM
     border: var(--violet);
 }
 
+.onlyOneChoice {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3%;
+}
+
+.checkboxLabel{
+    margin: 0;
+}

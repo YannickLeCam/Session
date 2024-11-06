@@ -47,12 +47,12 @@
             }) }}
         </div>
 
-        <div class="form-check mb-3">
+        <div class="form-check mb-3 onlyOneChoice">
             {{ form_widget(registrationForm.agreeTerms, {
                 'attr': {'class': 'form-check-input custom-checkbox', 'id': 'btn-check-2-outlined', 'autocomplete': 'off'}
             }) }}
             {{ form_label(registrationForm.agreeTerms, 'Acceptez-vous les termes', {
-                'label_attr': {'for': 'btn-check-2-outlined'}
+                'label_attr': {'for': 'btn-check-2-outlined', 'class':'checkboxLabel'}
             }) }}
         </div>
         
