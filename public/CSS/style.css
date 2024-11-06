@@ -34,7 +34,7 @@ form{
 }
 
 form h3 {
-    color: var(--white);
+    color: var(--lavander);
     margin-bottom: 3%;
     text-align: center;
     font-size: 4vw;
@@ -43,7 +43,7 @@ form h3 {
 }
 
 form label {
-    color: var(--white);
+    color: var(--lavander);
     margin-top: 3%;
     font-family: "Anton", sans-serif;
     font-weight: 400;
@@ -132,8 +132,18 @@ nav ul{
 }
 
 /*
-FORM REGISTER
+FORM
 */
+
+.form-control{
+    background-color: var(--lavander);
+}
+
+.form-control:focus{
+    background-color: var(--lavander);
+    box-shadow: 0px 0px 3px 3px var(--violetHover);
+    border-color: var(--violet);
+}
 
 .form-check-input{
     background-color: var(--lavander) ;
@@ -145,7 +155,7 @@ FORM REGISTER
 }
 
 .form-check-input:focus{
-    box-shadow: var(--violetHover);
+    box-shadow: 0px 0px 3px 3px var(--violetHover);
     border: var(--violet);
 }
 
