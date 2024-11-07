@@ -105,10 +105,13 @@ class SessionRepository extends ServiceEntityRepository
             ->andWhere('s.dateEnd > :now')
             ->setParameter('id', $userId)
             ->setParameter('now', new \DateTime())
-            ->orderBy('s.dateStart', 'ASC')  
+            ->orderBy('s.dateStart', 'ASC')
             ->getQuery()
             ->getResult();
     }
+    
+    
+    
     
 
     //    /**

@@ -14,7 +14,7 @@
 }
 
 body{
-    background-color: var(--gris) !important;
+    background-color: var(--grisHover) !important;
 }
 
 #wrapper{

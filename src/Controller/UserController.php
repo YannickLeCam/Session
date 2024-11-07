@@ -80,10 +80,10 @@ class UserController extends AbstractController
 
     #[Route('/user/getCurrentSession-{id}-{type}', name: 'user.currentAjax', requirements: ['id' => '\d+', 'type' => 'current|future|past|'])]
     #[IsGranted('ROLE_USER')]
-    public function getCurrentSessionAjax(User $user,SessionRepository $sessionRepository, SerializerInterface $serializer, string $type): JsonResponse
+    public function getCurrentSessionAjax(User $user,string $type, SessionRepository $sessionRepository, SerializerInterface $serializer ): JsonResponse
     {
         if ($this->getUser()->getId()=== $user->getId()) {
-
+            
             switch ($type) {
                 case 'current':
                     $sessions = $sessionRepository->findSessionCurrent($user->getId());
@@ -107,7 +107,6 @@ class UserController extends AbstractController
                     'name' => $session->getName(),
                     'dateStart' => $session->getFormattedDateStart(),
                     'dateEnd' => $session->getFormattedDateEnd(),
-    
                 ];
             }, $sessions);
     
